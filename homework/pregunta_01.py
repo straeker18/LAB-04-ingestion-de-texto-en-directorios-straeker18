@@ -5,8 +5,34 @@
 Escriba el codigo que ejecute la accion solicitada en cada pregunta.
 """
 
+import os
+import zipfile
+import pandas as pd
 
 def pregunta_01():
+    with zipfile.ZipFile("files/input.zip", "r") as zip_ref:
+        zip_ref.extractall("files")
+
+    def procesar_datos(tipo):
+        datos = []
+        for i in ["negative", "positive", "neutral"]:
+            ruta = f"files/input/{tipo}/{i}"
+            for archivo in os.listdir(ruta):
+                with open(os.path.join(ruta, archivo), "r", encoding="utf-8") as f:
+                    datos.append({"phrase": f.read().strip(), "target": i})  
+        return datos
+
+    train_data = procesar_datos("train")
+    test_data = procesar_datos("test")
+
+    df_train = pd.DataFrame(train_data)
+    df_test = pd.DataFrame(test_data)
+
+    os.makedirs("files/output", exist_ok=True)
+
+    df_train.to_csv("files/output/train_dataset.csv", index=False)
+    df_test.to_csv("files/output/test_dataset.csv", index=False)
+
     """
     La información requerida para este laboratio esta almacenada en el
     archivo "files/input.zip" ubicado en la carpeta raíz.
@@ -71,3 +97,4 @@ def pregunta_01():
 
 
     """
+pregunta_01()
