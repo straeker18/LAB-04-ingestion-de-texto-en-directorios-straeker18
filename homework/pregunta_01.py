@@ -30,7 +30,9 @@ def pregunta_01():
 
     os.makedirs("files/output", exist_ok=True)
 
+
     df_train.to_csv("files/output/train_dataset.csv", index=False)
+    
     df_test.to_csv("files/output/test_dataset.csv", index=False)
 
     """
